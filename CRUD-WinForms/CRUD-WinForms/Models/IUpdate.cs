@@ -8,6 +8,6 @@ namespace CRUD_WinForms.Models
 {
     public interface IUpdate<T>
     {
-        public bool Update(Usuario usuarioActualizado);
+        public T Update(T something);
     }
 }

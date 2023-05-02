@@ -8,6 +8,6 @@ namespace CRUD_WinForms.Models
 {
     public interface IDelete<T>
     {
-        public void Delete(int id);
+        public T Delete(T something);
     }
 }

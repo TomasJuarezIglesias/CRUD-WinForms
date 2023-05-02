@@ -8,6 +8,6 @@ namespace CRUD_WinForms.Models
 {
     public interface ICreate<T>
     {
-        public void Create(Usuario nuevoUsuario);
+        public T Create(T something);
     }
 }

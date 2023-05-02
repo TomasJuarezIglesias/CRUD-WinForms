@@ -9,44 +9,43 @@ using System.Threading.Tasks;
 
 namespace CRUD_WinForms
 {
-    public class DbConnection : ICrud<Usuario>
+    public class userRepository : ICrud<Usuario>
     {
-        public void Create(Usuario nuevoUsuario)
+        public Usuario Create(Usuario nuevoUsuario)
         {
             using var context = new UsuariosContext();
             context.Add(nuevoUsuario);
             context.SaveChanges();
+            return nuevoUsuario;
         }
 
         public List<Usuario> Read()
         {
             using var context = new UsuariosContext();
-            List<Usuario> listaUsuarios = context.Usuarios.ToList();
-            return listaUsuarios;
+            return context.Usuarios.ToList();
         }
 
-        public bool Update(Usuario usuarioActualizado)
+        public Usuario? Update(Usuario usuarioActualizado)
         {
             using var context = new UsuariosContext();
-            List<Usuario> listaUsuarios = Read();
-            foreach (var item in listaUsuarios)
+            var usuario = Read().Where(x => x.Dni == usuarioActualizado.Dni).First();
+
+            if (usuario != null)
             {
-                if (item.Dni == usuarioActualizado.Dni)
-                {
-                    context.Entry(usuarioActualizado).State = EntityState.Modified;
-                    context.SaveChanges();
-                    return true;
-                }
+                context.Entry(usuarioActualizado).State = EntityState.Modified;
+                context.SaveChanges();
+                return usuarioActualizado;
             }
-            return false;
+            return null;
         }
 
-        public void Delete(int id)
+        public Usuario Delete(Usuario unUsuario)
         {
             using var context = new UsuariosContext();
-            var usuario = Read().Where(x => x.Dni == id).First();
+            var usuario = Read().Where(x => x.Dni == unUsuario.Dni).First();
             context.Remove(usuario);
             context.SaveChanges();
+            return usuario;
         }
 
 

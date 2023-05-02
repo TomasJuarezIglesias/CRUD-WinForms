@@ -10,7 +10,7 @@ namespace CRUD_WinForms
             MostrarUsuarios();
         }
 
-        DbConnection connection = new();
+        userRepository connection = new();
 
         private void BtnAgregar_Click(object sender, EventArgs e)
         {
@@ -79,7 +79,12 @@ namespace CRUD_WinForms
             nuevoUsuario.FechaNacimiento = DateNacimiento.Value.Date;
             nuevoUsuario.NumeroTelefono = int.Parse(TxtTelefono.Text);
 
-            connection.Update(nuevoUsuario);
+            var canUpdate = connection.Update(nuevoUsuario);
+            if(canUpdate == null)
+            {
+                MessageBox.Show("Ha ingresado un dni que no se encuentra en la base de datos");
+                return;
+            }
             MostrarUsuarios();
             LimpiarDatos();
         }
@@ -94,7 +99,8 @@ namespace CRUD_WinForms
             };
 
             int dniEliminar = int.Parse(TxtDNIEliminar.Text);
-            connection.Delete(dniEliminar);
+            Usuario usuario = connection.Read().Where(x => x.Dni == dniEliminar).First();
+            connection.Delete(usuario);
             MostrarUsuarios();
             LimpiarDatos();
         }
